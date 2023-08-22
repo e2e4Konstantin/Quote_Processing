@@ -1,7 +1,7 @@
 from utilites import parse_file_with_quotes
 paths = {
     "home": r"F:\Kazak\GoogleDrive\1_KK\Job_CNAC\1_targets\tasck_2\sources",
-    "office": r"*",
+    "office": r"C:\Users\kazak.ke\PycharmProjects\Quote_Processing\src",
 }
 
 source_files = {
@@ -11,7 +11,7 @@ source_files = {
     5: (r"template_5_67.xlsx", "name"),
     6: (r"res_68.xlsx", "1")
 }
-place = "home" # "office"
+place = "office"    # "home" #
 
 # file_queue = [(source_files[x][0], paths[place], source_files[x][1]) for x in list(source_files.keys())[1:4]]
 

@@ -12,13 +12,17 @@ class Collection:
      """
     row: int
     chapter_code: str
-    cod: str
+    code: str
     number: str
     title: str
 
     def __str__(self):
         s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
         return f'{type(self).__name__}({s})'
+
+    def __repr__(self):
+        s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
+        return f"{type(self).__name__}({s})"
 
 
 @dataclass
@@ -100,7 +104,7 @@ dict_tables:  dict[str: Table] = {}
 service_data = {
     "collections": dict_collections,
     "sections": dict_sections,
-    "sub_sections": dict_sub_sections,
+    "subsections": dict_sub_sections,
     "tables": dict_tables
 
 }

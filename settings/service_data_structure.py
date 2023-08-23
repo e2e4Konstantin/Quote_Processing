@@ -17,36 +17,69 @@ class Collection:
     title: str
 
     def __str__(self):
-        s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
-        return f'{type(self).__name__}({s})'
+        s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
+        return f"{type(self).__name__}({s})"
 
     def __repr__(self):
         s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
-        return f"{type(self).__name__}({s})"
+        return f"({s})"
+
+    def info(self):
+        s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
+        return f'{type(self).__name__}({s})'
 
 
 @dataclass
 class Section:
-    """ Отдел  """
-    row: int  # номер строки начала отдела
-    cod: str  # код
-    name: str  # название
-    collection: Collection  # указатель на сборник
+    """ Отдел
+        - номер строки в исходном файле.
+        - код главы
+        - код сборника
+        - код отдела
+        - номер Отела из названия
+        - название
+    """
+    row: int
+    chapter_code: str
+    collection_code: str
+    code: str
+    number: str
+    title: str
 
     def __str__(self):
+        s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
+        return f"{type(self).__name__}({s})"
+
+    def __repr__(self):
+        s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
+        return f"({s})"
+
+    def info(self):
         s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
         return f'{type(self).__name__}({s})'
 
 
 @dataclass
 class SubSection:
-    """ Раздел  """
-    row: int  # номер строки начала раздела
-    cod: str  # код
-    name: str  # название
-    section: Section  # указатель на отдел
+    """ Раздел (номер строки; код главы; код сборника; код отдела;
+        код Раздела; номер Раздела из названия; название) """
+    row: int
+    chapter_code: str
+    collection_code: str
+    section_code: str
+    code: str
+    number: str
+    title: str
 
     def __str__(self):
+        s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
+        return f"{type(self).__name__}({s})"
+
+    def __repr__(self):
+        s = ', '.join(f'{getattr(self, x.name)!r}' for x in fields(self))
+        return f"({s})"
+
+    def info(self):
         s = '; '.join(f'{x.name}={getattr(self, x.name)!r}' for x in fields(self))
         return f'{type(self).__name__}({s})'
 
@@ -55,7 +88,8 @@ class SubSection:
 class Header:
     """Заголовок универсальный """
     column_header: int = 0  # номер столбца заголовка
-    name_header: str = ""   # название заголовка
+    name_header: str = ""  # название заголовка
+
 
 @dataclass
 class OptionHeader:
@@ -63,7 +97,6 @@ class OptionHeader:
     column_option_header: int = 0  # первая колонка заголовка параметров
     name_option_header: str = ""  # название таблицы параметров
     option_headers: list[Header] = field(default_factory=list)  # список заголовков значений параметра
-
 
 
 @dataclass
@@ -95,11 +128,10 @@ class Table:
 
 """ сервисные данные добытые из файла"""
 
-
 dict_collections: dict[str: Collection] = {}
 dict_sections: dict[str: Section] = {}
 dict_sub_sections: dict[str: SubSection] = {}
-dict_tables:  dict[str: Table] = {}
+dict_tables: dict[str: Table] = {}
 
 service_data = {
     "collections": dict_collections,
@@ -109,14 +141,11 @@ service_data = {
 
 }
 
-
 if __name__ == '__main__':
     data_1 = (18179, '3', '3.51', '51', 'Прочие строительные работы')
     data_2 = (16615, '3', '3.39', '39', 'Металлические конструкции гидротехнических сооружений')
     c = Collection(*data_1)
     service_data["collections"]['895**'] = Collection(*data_2)
+
     print(c)
     print(service_data)
-
-
-

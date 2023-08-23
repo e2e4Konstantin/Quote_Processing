@@ -1,4 +1,4 @@
-from pandas import DataFrame
+import pandas
 import gc
 from settings import SourceData, service_data
 
@@ -14,25 +14,29 @@ from .fill_tables_properties import fill_tables_properties
 
 
 def extract_data(src: SourceData):
-    cut = src.df[src.df['H'].notna()].filter(['B', 'C', 'D', 'E', 'F', 'H'])
+    columns = ['B', 'C', 'D', 'E', 'F', 'H']
+    cut = src.df[src.df['H'].notna()].filter(columns)
+    cut = cut[cut.columns].astype(pandas.StringDtype())
+    print(cut.info())
 
-    # collections_extract(cut)
-    # sections_extract(cut)
-    # subsections_extract(cut)
-    tables_extract(cut)
+    collections_extract(cut)
+    sections_extract(cut)
+    subsections_extract(cut)
+    # tables_extract(cut)
 
     # pprint(service_data['collections'], width=300)
-    # pprint(service_data['sections'], width=300)
+    print("результат 'sections': ",)
+    pprint( service_data['sections'], width=300)
     # pprint(service_data['subsections'], width=300)
 
     # pprint(dict(itertools.islice(service_data['tables'].items(), 10)), width=300)
+    print(f"Прочитано: ")
+    print(f"\tСборники: {len(service_data['collections'])}")
+    print(f"\tОтделы: {len(service_data['sections'])}")
+    print(f"Разделы: {len(service_data['subsections'])}")
+    # print(f"Таблицы: {len(service_data['tables'])}")
 
-    # print(f"Сборники: {len(service_data['collections'])}")
-    # print(f"Отделы: {len(service_data['sections'])}")
-    # print(f"Разделы: {len(service_data['subsections'])}")
-    print(f"Таблицы: {len(service_data['tables'])}")
-
-    fill_tables_properties(src)
+    # fill_tables_properties(src)
 
 
     del cut

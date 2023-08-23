@@ -35,17 +35,17 @@ class SourceData:
     """
 
     def __init__(self, file_name: str = None, file_path: str = None, sheet_name: str = None,
-                 skip_rows=None, row_count=None):
+                 skip_rows: int = None, row_count: int = None, data_from: str = 'file'):
         self.full_name = ""
         self.sheet_name = ""
         self.df: pandas.DataFrame() = None
         self.column_names = []
         self.row_max = 0
         self.column_max = 0
-        self.get_data_from_excel(file_name, file_path, sheet_name, skip_rows, row_count)
+        self.get_data_from_excel(file_name, file_path, sheet_name, skip_rows, row_count, data_from)
 
     def get_data_from_excel(self, file_name: str = None, file_path: str = None, sheet_name: str = None,
-                            skip_rows=0, row_count=None):
+                            skip_rows: int = 0, row_count: int = None, data_from: str = 'file'):
         """ Читает данные из файла.
             - именует столбцы как в excel таблице
             - удаляет пустые столбцы
@@ -54,31 +54,27 @@ class SourceData:
         full_name = get_full_file_name(file_name, file_path)
         if full_name:
             try:
-                self.df = pandas.read_excel(
-                    io=full_name, sheet_name=sheet_name,
-                    header=None, dtype="object",
-                    skiprows=skip_rows,
-                    nrows=row_count
-                )
-                if not self.df.empty:
-                    self.full_name = full_name
-                    self.sheet_name = sheet_name
-                    names = generate_column_names(self.df.shape[1])
-                    self.df.columns = names
-                    self.df.dropna()
-                    self.df = self.df.convert_dtypes()
-                    self.row_max = self.df.shape[0] - 1
-                    self.column_max = self.df.shape[1] - 1
-                    self.column_names.extend(list(self.df.columns))
-
-                    print(f"данные успешно прочитаны из файла: {full_name},\nлист: '{sheet_name}'.")
-                else:
-                    raise TypeError(self.__class__)
+                self.df = pandas.read_excel(io=full_name, sheet_name=sheet_name, header=None, dtype="object",
+                                            skiprows=skip_rows, nrows=row_count)
             except Exception as err:
                 error_out = f"{console_colors['RED']}{err}{console_colors['RESET']}"
                 show_full_name = f"'{console_colors['YELLOW']}{full_name}{console_colors['RESET']}'"
                 print(f"ошибка при чтении данных из файла {show_full_name}:\n\t-->> {error_out}")
                 sys.exit()
+            if not self.df.empty:
+                self.full_name = full_name
+                self.sheet_name = sheet_name
+                names = generate_column_names(self.df.shape[1])
+                self.df.columns = names
+                # self.df.dropna()
+                self.df = self.df.convert_dtypes()
+                self.row_max = self.df.shape[0] - 1
+                self.column_max = self.df.shape[1] - 1
+                self.column_names.extend(list(self.df.columns))
+                print(f"данные успешно прочитаны из файла: {full_name},\nлист: '{sheet_name}'.")
+                # self.df.to_pickle(f"{self.full_name[:-4]}pickle")
+            else:
+                raise TypeError(self.__class__)
         else:
             show_full_name = f"'{console_colors['YELLOW']}{full_name}{console_colors['RESET']}'"
             print(f"Не найден excel файл с данными {show_full_name}.")

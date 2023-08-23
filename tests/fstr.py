@@ -1,6 +1,8 @@
 import time
 import sys
 
+print(f'<{"-"* 50}>\n')
+
 s = f'{time.strftime("%x %X")}'
 print(s)
 

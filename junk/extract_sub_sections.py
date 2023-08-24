@@ -4,7 +4,7 @@ import re
 from re import Pattern
 from pprint import pprint
 from settings import src_model, service_data, console_colors, SubSection
-from .get_duplicates import get_duplicates
+from utilites.get_duplicates import get_duplicates
 
 
 def get_subsection_from_df(row: int, df: DataFrame) -> SubSection:
@@ -46,23 +46,25 @@ def subsections_extract(df: DataFrame):
     # print('')
     # print('Отделы: ', service_data['sections'])
     if len(service_data['sections']) > 0:
-        x0 = [subsection.section_code for i, subsection in enumerate(subsections)]
-        x1 = list(service_data['sections'].keys())
-        print(x0)
-        print(x1)
+        section_code = [subsection.section_code for i, subsection in enumerate(subsections)]
+        section_key = list(service_data['sections'].keys())
+        bugs = set([code_i for code_i in section_code if code_i not in section_key])
+        print(f"{section_code=}")
+        print(f"{section_key=}")
+        print(f"{bugs=}")
+        print(len(bugs), f'<{"-" * 50}>\n')
 
-        for z in x0:
-            if z not in x1:
-                print(z, False)
 
-        x = [subsection.code for i, subsection in enumerate(subsections) if not service_data['sections'].get(subsection.section_code, None)]
-        print(len(x), f'<{"-"* 50}>\n', x, f'\n<{"-"* 50}>')
 
-        none_section = {i: subsection
-                        for i, subsection in enumerate(subsections)
-                        if service_data['sections'].get(subsection.section_code, None) is None
-                        }
-        print(len(none_section), f'{"*"* 50}\n', none_section, f'\n{"*"* 50}')
+
+        # x = [subsection.code for i, subsection in enumerate(subsections) if not service_data['sections'].get(subsection.section_code, None)]
+        # print(len(x), f'<{"-"* 50}>\n', x, f'\n<{"-"* 50}>')
+        #
+        # none_section = {i: subsection
+        #                 for i, subsection in enumerate(subsections)
+        #                 if service_data['sections'].get(subsection.section_code, None) is None
+        #                 }
+        # print(len(none_section), f'{"*"* 50}\n', none_section, f'\n{"*"* 50}')
         # if len(none_section) > 0:
         #     print(f"'Разделы' без 'Отделов': {console_colors['YELLOW']}{none_section}{console_colors['RESET']}")
         #     deleted = [subsections.pop(bc) for bc in none_section]

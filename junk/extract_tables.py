@@ -4,7 +4,7 @@ import re
 from re import Pattern
 from pprint import pprint
 from settings import src_model, service_data, console_colors
-from .get_duplicates import get_duplicates
+from utilites.get_duplicates import get_duplicates
 
 
 def get_table_from_df(row: int, df: DataFrame) -> tuple[int, str, str, str, str, str, str, str]:

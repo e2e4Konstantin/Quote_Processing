@@ -4,7 +4,7 @@ import re
 from re import Pattern
 
 from settings import src_model, service_data, console_colors, Collection
-from .get_duplicates import get_duplicates
+from utilites.get_duplicates import get_duplicates
 
 
 def get_collection_data(row: int, df: DataFrame) -> Collection:
